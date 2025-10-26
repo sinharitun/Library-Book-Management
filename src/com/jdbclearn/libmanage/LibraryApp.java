@@ -1,5 +1,6 @@
 package com.jdbclearn.libmanage;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class LibraryApp {
@@ -8,6 +9,7 @@ public class LibraryApp {
 		
 		Scanner scan=new Scanner(System.in);
 		BookDAO bdao=new BookDAO();
+		Books book;
 		
 		try {
 			
@@ -40,8 +42,8 @@ public class LibraryApp {
 					System.out.print("Enter year: ");
 					int year=scan.nextInt();
 					System.out.print("Enter price of book: ");
-					double price=scan.nextInt();
-					Books book=new Books(title, author, isbn, year, price);
+					double price=scan.nextDouble();
+					book=new Books(title, author, isbn, year, price);
 					boolean result=bdao.addBook(book);
 					if(result) {
 						System.out.println("Task Completed");
@@ -51,9 +53,27 @@ public class LibraryApp {
 					}
 					break;
 				case 2:
-					continue;
+					System.out.print("---- All Books ----\n");
+					System.out.println("-------------------------------------------------------------------------");
+					System.out.println("| id  | Title           | Author        | ISBN Code | Year | Price      |");
+					System.out.println("-------------------------------------------------------------------------");
+					List<Books> allBooks=bdao.getAllBooks();
+					for(Books books:allBooks) {
+						System.out.println(books);
+						System.out.println("\n-------------------------------------------------------------------------");
+					}
+					
+					break;
 				case 3: 
-					continue;
+					System.out.println("Enter the correct ISBN code ");
+					String inputIsbnCode=scan.nextLine();
+					book=bdao.getBookByISBN(inputIsbnCode);
+					System.out.println("-------------------------------------------------------------------------");
+					System.out.println("| id  | Title           | Author        | ISBN Code | Year | Price      |");
+					System.out.println("-------------------------------------------------------------------------");
+					System.out.println(book);
+					System.out.println("-------------------------------------------------------------------------");
+					break;
 				case 4: 
 					continue;
 				case 5:
@@ -63,10 +83,6 @@ public class LibraryApp {
 				}
 				
 			}
-			
-			
-			
-			
 			
 		} catch (Exception e) {
 			System.err.println("Something went wrong :- "+e);

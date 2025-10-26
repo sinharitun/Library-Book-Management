@@ -9,9 +9,6 @@ public class Books {
 	private int year;
 	private double price;
 	
-	public Books() {
-		
-	}
 	
 	public Books(int id, String title, String author, String isbn, int year, double price) {
 		super();
@@ -36,6 +33,9 @@ public class Books {
 
 	
 //	id of books
+	public void setId(int id) {
+		this.id=id;
+	}
 	public int getId() {
 		return id;
 	}
@@ -80,11 +80,10 @@ public class Books {
 		this.price = price;
 	}
 	
-	
 	@Override
 	public String toString() {
-		return "Data Stored in Database";
+		
+		return String.format("| %-4d| %-16s| %-14s| %-10s| %d | %-11f|", this.id,this.title,this.author,this.isbn,this.year,this.price);
 	}
 	
-
 }

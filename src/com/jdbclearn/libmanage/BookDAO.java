@@ -3,7 +3,11 @@ package com.jdbclearn.libmanage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookDAO {
 
@@ -14,7 +18,7 @@ public class BookDAO {
 	//  Constructor for	Loading Driver
 	public BookDAO() {
 		try {
-			
+
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
 		} catch (ClassNotFoundException e) {
@@ -51,6 +55,57 @@ public class BookDAO {
 
 
 		return rowAffected>0;
+	}
+
+	//	Getting all books Data Stored in the database
+	public List<Books> getAllBooks() {
+
+		String query="Select * from books";
+		List<Books> allBooks = new ArrayList<Books>();
+
+		try(Connection con = DriverManager.getConnection(url,user,pass);
+				Statement ps = con.createStatement()) {
+
+
+			ResultSet result=ps.executeQuery(query);
+
+
+			while(result.next()) {
+				Books book=new Books(result.getInt("id"),result.getString("title"),result.getString("author"),result.getString("isbn"),result.getInt("year"),result.getDouble("price"));
+				allBooks.add(book);
+
+			}
+
+
+		} catch (SQLException e) {
+			System.err.println("Somthing went wrong in data fetching");
+		}
+		return allBooks;
+
+	}
+
+	// Getting specific data of book using its ISBN unique code
+	public Books getBookByISBN(String input) {
+
+		String query="Select * from books WHERE isbn = ?";
+
+		Books book=null;
+
+		try(Connection con = DriverManager.getConnection(url,user,pass);
+				PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, input);
+
+			ResultSet result=ps.executeQuery();
+			if(result.next()) {
+				book=new Books(result.getInt("id"),result.getString("title"),result.getString("author"),result.getString("isbn"),result.getInt("year"),result.getDouble("price"));
+			}	
+
+		} catch (SQLException e) {
+			System.err.println("Somthing went wrong in data fetching");
+		}
+
+		return book;
+
 	}
 
 
