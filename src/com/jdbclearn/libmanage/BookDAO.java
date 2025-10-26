@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BookDAO {
 
 	private String url="jdbc:mysql://localhost:3306/libmanagement";
@@ -107,6 +108,76 @@ public class BookDAO {
 		return book;
 
 	}
+	
+	public boolean updatePrice(String isbn,double price) {
+		
+		String query="UPDATE BOOKS SET price=? where isbn=?";
+		int rowAffected=0;
+		
+		try (Connection con = DriverManager.getConnection(url,user,pass);
+				PreparedStatement ps=con.prepareStatement(query)){
+			ps.setDouble(1, price);
+			ps.setString(2, isbn);
+			
+			rowAffected=ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.err.println("problem occured  while updating the price of book.");
+		}
+		if(rowAffected>0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	}
+	
+	public boolean deleteRecord(String isbn) {
+		
+		String query="DELETE FROM books where isbn=?";
+		int rowAffected=0;
+		
+		try (Connection con = DriverManager.getConnection(url,user,pass);
+				PreparedStatement ps=con.prepareStatement(query)){
+			ps.setString(1, isbn);
+			rowAffected=ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.err.println("Problem occured during deleting the record ");
+		}
+		
+		if(rowAffected>0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+		
+	}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

@@ -10,6 +10,8 @@ public class LibraryApp {
 		Scanner scan=new Scanner(System.in);
 		BookDAO bdao=new BookDAO();
 		Books book;
+		String isbn;
+		double price;
 		
 		try {
 			
@@ -17,7 +19,7 @@ public class LibraryApp {
 			
 			boolean flag=true;
 			while(flag) {
-				System.out.println("------------------------------ MENU ------------------------------\n");
+				System.out.println("\n------------------------------ MENU ------------------------------\n");
 				System.out.println("1. Add Book");
 				System.out.println("2. View All Books");
 				System.out.println("3. Search by ISBN");
@@ -38,11 +40,11 @@ public class LibraryApp {
 					System.out.print("\nEnter author name: ");
 					String author=scan.nextLine();
 					System.out.print("Enter unique ISBN code:");
-					String isbn=scan.nextLine();
+					isbn=scan.nextLine();
 					System.out.print("Enter year: ");
 					int year=scan.nextInt();
 					System.out.print("Enter price of book: ");
-					double price=scan.nextDouble();
+					price=scan.nextDouble();
 					book=new Books(title, author, isbn, year, price);
 					boolean result=bdao.addBook(book);
 					if(result) {
@@ -75,9 +77,29 @@ public class LibraryApp {
 					System.out.println("-------------------------------------------------------------------------");
 					break;
 				case 4: 
-					continue;
+					System.out.print("Enter the ISBN code of the book you want to update the price: ");
+					isbn=scan.nextLine();
+					System.out.println("\nEnter the Price: ");
+					price=scan.nextDouble();
+					if(bdao.updatePrice(isbn,price)) {
+						System.out.println("Price ubpdated successfully");
+					}
+					else {
+						System.out.println("Enter existing ISBN code5");
+					}
+					
+					break;
 				case 5:
-					continue;
+					System.out.println("Enter the ISBN code of the book you want to delete the record: ");
+					isbn=scan.nextLine();
+					if(bdao.deleteRecord(isbn)) {
+						System.out.println("Record detelted successfully");
+					}
+					else {
+						System.out.println("Record not found");
+					}
+					
+					break;
 				case 6:
 					flag=false;
 				}
